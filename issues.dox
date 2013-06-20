@@ -1,0 +1,15 @@
+/** @page issues
+    @tableofcontents
+
+    This page contains the sections @ref open_issues and @ref closed_issues
+    
+    @section open_issues
+     yyyyyyy
+    @section closed_issues
+     1. Do we keep the output of filtered log?
+     	Yes, because we need this displaying in the monitor.
+     2. How to speed up big size input file?
+        With 2 threads, one is for reading file, another one is for process the text(filtering the log),every file reading size is 100M.
+  
+
+ */
