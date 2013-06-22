@@ -13,6 +13,9 @@ class log_analysis_tool
 public:
     log_analysis_tool(int argc, char *argv[]);
     void run_filter();
+    const char* get_filename();
+    const char* get_rgEprStr();
+
 private:
     const char *filename;
     const char *rgEprStr;

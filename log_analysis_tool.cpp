@@ -30,3 +30,13 @@ void log_analysis_tool::run_filter()
 {
     ;
 }
+
+const char* log_analysis_tool::get_filename()
+{
+    return filename;
+}
+
+const char* log_analysis_tool::get_rgEprStr()
+{
+    return rgEprStr;
+}
