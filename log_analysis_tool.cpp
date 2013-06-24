@@ -7,7 +7,7 @@
 
 /** @brief log_analysis_tool constructor
 */
-log_analysis_tool::log_analysis_tool(int argc, char *argv[])
+log_analysis_tool::log_analysis_tool(int argc, const char *argv[])
 {
     if (argc > 1 )    rgEprStr = argv[1];
     else cout<<"argc(parameters number) is 1, invalid input"<<endl;
@@ -39,4 +39,14 @@ const char* log_analysis_tool::get_filename()
 const char* log_analysis_tool::get_rgEprStr()
 {
     return rgEprStr;
+}
+
+void log_analysis_tool::set_rgEprStr(const char* update_rgEprStr)
+{
+    rgEprStr = update_rgEprStr;
+}
+
+void log_analysis_tool::set_filename(const char* update_filename)
+{
+    filename = update_filename;
 }

@@ -11,10 +11,12 @@ using namespace std;
 class log_analysis_tool
 {
 public:
-    log_analysis_tool(int argc, char *argv[]);
+    log_analysis_tool(int argc, const char *argv[]);
     void run_filter();
     const char* get_filename();
     const char* get_rgEprStr();
+    void set_rgEprStr(const char*);
+    void set_filename(const char*);
 
 private:
     const char *filename;
