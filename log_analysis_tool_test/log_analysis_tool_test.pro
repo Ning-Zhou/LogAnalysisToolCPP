@@ -12,6 +12,7 @@ TARGET = log_analysis_tool_test
 CONFIG   += console
 CONFIG   -= app_bundle
 CONFIG   += qtestlib
+CONFIG   += debug
 
 TEMPLATE = app
 

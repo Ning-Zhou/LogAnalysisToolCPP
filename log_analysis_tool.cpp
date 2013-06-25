@@ -9,11 +9,11 @@
 */
 log_analysis_tool::log_analysis_tool(int argc, const char *argv[])
 {
-    if (argc > 1 )    rgEprStr = argv[1];
-    else cout<<"argc(parameters number) is 1, invalid input"<<endl;
+    if (argc == 1 ) cout<<"argc(parameters number) is 1, invalid input"<<endl;
+    else    rgEprStr = argv[1];
 
-    if (argc > 2 )    filename = argv[2];
-    else cout<<"argc(parameters number) is 2, invalid input"<<endl;
+    if (argc == 2 )  cout<<"argc(parameters number) is 2, invalid input"<<endl;
+    else    filename = argv[2];
 
     if (argc > 3)
     {
