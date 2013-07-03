@@ -11,7 +11,7 @@ QT       -= gui
 TARGET = log_analysis_tool_test
 CONFIG   += console
 CONFIG   -= app_bundle
-CONFIG   += qtestlib
+QT   += testlib
 CONFIG   += debug
 
 TEMPLATE = app
