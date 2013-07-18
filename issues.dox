@@ -4,7 +4,8 @@
     This page contains the sections @ref open_issues and @ref closed_issues
     
     @section open_issues
-     yyyyyyy
+     1. How to do with boost regex library, when the code is being released?
+
     @section closed_issues
      1. Do we keep the output of filtered log?
      	Yes, because we need this displaying in the monitor.

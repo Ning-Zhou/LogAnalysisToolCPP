@@ -2,6 +2,13 @@
 #define LOG_ANALYSIS_TOOL_H
 
 #include <iostream>
+#include <boost/regex.hpp>
+#include <sstream>
+#include <fstream>
+
+#define FILE_BUFFER_LENGTH (1024*24)
+#define LINE_BUFFER_LENGTH 1024
+
 using namespace std;
 
 /** @file log_analysis_tool.h
@@ -19,9 +26,16 @@ public:
     void set_filename(const char*);
 
 private:
+    string create_formatter(const char* rgEprStr);
+    unsigned int analyse_block_buffer(char file_block_buffer[]);
+    void colored_print_matched_part(char buffer[]);
+
+
+private:
     const char *filename;
     const char *rgEprStr;
     const char *filtered_log;
+    string      formatter;
 };
 
 #endif // LOG_ANALYSIS_TOOL_H

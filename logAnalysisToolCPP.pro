@@ -20,3 +20,9 @@ SOURCES += main.cpp \
 
 HEADERS += \
     log_analysis_tool.h
+
+
+
+
+#INCLUDEPATH += /usr/local/boost_1_54_0
+LIBS += /usr/local/lib/libboost_regex.a

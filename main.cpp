@@ -2,7 +2,7 @@
 
 #include "log_analysis_tool.h"
 
-int main(int argc, char *argv[])
+int main(int argc, const char *argv[])
 {
 //    QCoreApplication a(argc, argv);
 
