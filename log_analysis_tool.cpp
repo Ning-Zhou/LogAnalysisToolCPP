@@ -10,7 +10,7 @@
 log_analysis_tool::log_analysis_tool(int argc, const char *argv[])
 {
     if (argc == 1 ) cout<<"argc(parameters number) is 1, invalid input"<<endl;
-    else    rgEprStr = argv[1];
+    else    set_rgEprStr(argv[1]);
 
     if (argc == 2 )  cout<<"argc(parameters number) is 2, invalid input"<<endl;
     else    filename = argv[2];
@@ -20,6 +20,8 @@ log_analysis_tool::log_analysis_tool(int argc, const char *argv[])
         cout<<"argc(parameters number) more than 3, invalid input"<<endl;
     }
 }
+
+
 
 void log_analysis_tool::colored_print_matched_part(char buffer[])
 {
@@ -48,7 +50,7 @@ unsigned int log_analysis_tool::analyse_block_buffer(char *block_buffer)
 
 }
 
-std::string log_analysis_tool::create_formatter(const char* originalK)
+std::string log_analysis_tool::create_formatter()
 {
   const char *colorCodes[]={"31", //red
                       "32", //green
@@ -56,29 +58,22 @@ std::string log_analysis_tool::create_formatter(const char* originalK)
                       "34", //blue
                       "35", //magenta
                       "36", //cyan
+                      "4",  //underline
                       "4;31", //red with underline
                       "4;32",
                       "4;33",
                       "4;34",
                       "4;35",
                       "4;36",
-                      "4"};   //underline
+                      };   
   std::string formatter;
-
-
-
-
-  int nk = 1;  //nk: how many keywords there
-  for(int i=0; originalK[i]!='\0'; i++){
-    if(originalK[i]=='|')nk++;
-  }
 
   //create the formatter
   std::string prefix("\033[");
   std::string suffix("\033[0m");
   std::string colorCode;
   std::string brph;//backReferencePlaceHolder
-  for (int i=0;i<nk;i++){
+  for (int i=0;i<numOfKeyword;i++){
     colorCode = "m";
     colorCode = colorCodes[i%sizeof(colorCodes)] + colorCode;
     brph = '1' + i;
@@ -97,7 +92,7 @@ std::string log_analysis_tool::create_formatter(const char* originalK)
 */
 void log_analysis_tool::run_filter()
 {
-    formatter = create_formatter(rgEprStr);//formatter used to color the keywords
+    formatter = create_formatter();//formatter used to color the keywords
 
     // open the file to be analysed
     fstream fs;
@@ -134,13 +129,40 @@ const char* log_analysis_tool::get_filename()
 
 const char* log_analysis_tool::get_rgEprStr()
 {
-    return rgEprStr;
+  return rgEprStr.data();
 }
+
+
+
 
 void log_analysis_tool::set_rgEprStr(const char* update_rgEprStr)
 {
-    rgEprStr = update_rgEprStr;
+    numOfKeyword = 1;
+    for(int i=0; update_rgEprStr[i]!='\0'; i++){
+      if(update_rgEprStr[i]=='|')numOfKeyword++;
+    }
+
+    string formatter_tmp("($1)");
+    string partial_fmt;
+    string backReference_tmp("(.+)");
+    string another_backReference_tmp("\\|(.+)");
+    string brph;
+    for (int i = 1 ; i< numOfKeyword; i++)
+    {
+        backReference_tmp = backReference_tmp + another_backReference_tmp;
+        partial_fmt = '1' + i;
+        partial_fmt = "|($" + partial_fmt + ')';
+        formatter_tmp     = formatter_tmp + partial_fmt;
+    }
+
+    // boost::regex expression_tmp("(green)|(yellow)|(blue)");
+    boost::regex expression_tmp(backReference_tmp);
+    string       line_tmp(update_rgEprStr);
+    rgEprStr = boost::regex_replace(line_tmp, expression_tmp, formatter_tmp.data());
+
 }
+
+
 
 void log_analysis_tool::set_filename(const char* update_filename)
 {

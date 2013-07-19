@@ -26,16 +26,17 @@ public:
     void set_filename(const char*);
 
 private:
-    string create_formatter(const char* rgEprStr);
+    string create_formatter();
     unsigned int analyse_block_buffer(char file_block_buffer[]);
     void colored_print_matched_part(char buffer[]);
 
 
 private:
     const char *filename;
-    const char *rgEprStr;
     const char *filtered_log;
     string      formatter;
+    unsigned short numOfKeyword;
+    string      rgEprStr;
 };
 
 #endif // LOG_ANALYSIS_TOOL_H

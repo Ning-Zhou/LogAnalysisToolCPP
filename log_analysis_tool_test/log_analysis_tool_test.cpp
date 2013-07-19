@@ -4,7 +4,7 @@
 
 class log_analysis_tool_test: public QObject
 {
-    Q_OBJECT
+    Q_OBJECT	
 
 private slots:
     void constructor_test();
@@ -34,7 +34,7 @@ void log_analysis_tool_test::constructor_test()
   // test correct input
   log_analysis_tool *lat_p= new log_analysis_tool(argc, argv);
   QCOMPARE(lat_p->get_filename(),"log.txt");
-  QCOMPARE(lat_p->get_rgEprStr(),"green|yellow|blue");
+  QCOMPARE(lat_p->get_rgEprStr(),"(green)|(yellow)|(blue)");
   delete lat_p;
 
   // test incorrect input: only 1 parameter
@@ -68,7 +68,10 @@ void log_analysis_tool_test::set_rgEprStr_test()
     const char *argv[] = {"lat","green|yellow|blue","log.txt"};
     log_analysis_tool *lat_p= new log_analysis_tool(argc, argv);
     lat_p->set_rgEprStr("red|underline");
-    QCOMPARE(lat_p->get_rgEprStr(),"red|underline");
+    QCOMPARE(lat_p->get_rgEprStr(),"(red)|(underline)");
+    lat_p->set_rgEprStr("red");
+    QCOMPARE(lat_p->get_rgEprStr(),"(red)");
+
 }
 
 

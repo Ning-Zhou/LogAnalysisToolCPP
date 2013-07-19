@@ -21,4 +21,7 @@ SOURCES += log_analysis_tool_test.cpp
 
 SOURCES += "../log_analysis_tool.cpp"
 
+#INCLUDEPATH += /usr/local/boost_1_54_0
+LIBS += /usr/local/lib/libboost_regex.a
+
 
