@@ -5,7 +5,7 @@
 
 #include "log_analysis_tool.h"
 
-/** @brief log_analysis_tool constructor
+/** log_analysis_tool constructor
 */
 log_analysis_tool::log_analysis_tool(int argc, const char *argv[])
 {
@@ -21,8 +21,8 @@ log_analysis_tool::log_analysis_tool(int argc, const char *argv[])
     }
 }
 
-
-
+/** Print matching line with color with a certain color.
+*/
 void log_analysis_tool::colored_print_matched_part(char buffer[])
 {
   boost::regex expression(rgEprStr);
@@ -32,6 +32,11 @@ void log_analysis_tool::colored_print_matched_part(char buffer[])
   std::cout<<output<<std::endl;
 }
 
+/** Check if each line matches the regular expression. 
+ *  
+ @param [in] block_buffer is a character sequence
+ @param [out]  ss.gcount() number of left characters of last unended line. 
+*/
 unsigned int log_analysis_tool::analyse_block_buffer(char *block_buffer)
 {
 
@@ -50,6 +55,10 @@ unsigned int log_analysis_tool::analyse_block_buffer(char *block_buffer)
 
 }
 
+
+/** Create formatter.
+ *  This formatter is used to replace the matched part of every line with only change of color display with escape color. TODO: add an example of the formatter.
+*/
 std::string log_analysis_tool::create_formatter()
 {
   const char *colorCodes[]={"31", //red
@@ -85,10 +94,10 @@ std::string log_analysis_tool::create_formatter()
 }
 
 
-/** @brief filter the log with regular expression string
- *  [in] filename log file name
- *  [in] rgEprStr regular expression string
- *  [out] filtered_log filtered log string
+/** Filter the log with regular expression string.
+ *  @param [in] filename log file name
+ *  @param [in] rgEprStr regular expression string
+ *  @param [out] filtered_log filtered log string
 */
 void log_analysis_tool::run_filter()
 {
@@ -134,7 +143,11 @@ const char* log_analysis_tool::get_rgEprStr()
 
 
 
-
+/**  Turn user input keyword to regular expression.
+ *   For instance, if user input is "green|yellow|blue", regular expression input should be "(green)|(yellow)|(blue)". The parentheses are used for backtrace when the matched part should be replaced with color escape code.
+ *  @param [in] update_rgEprStr. user input regular expression to search (e.g. green|yellow|blue)
+ *  @param [out] rgEprStr regular expression
+ */
 void log_analysis_tool::set_rgEprStr(const char* update_rgEprStr)
 {
     numOfKeyword = 1;
@@ -155,7 +168,6 @@ void log_analysis_tool::set_rgEprStr(const char* update_rgEprStr)
         formatter_tmp     = formatter_tmp + partial_fmt;
     }
 
-    // boost::regex expression_tmp("(green)|(yellow)|(blue)");
     boost::regex expression_tmp(backReference_tmp);
     string       line_tmp(update_rgEprStr);
     rgEprStr = boost::regex_replace(line_tmp, expression_tmp, formatter_tmp.data());
