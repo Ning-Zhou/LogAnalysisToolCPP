@@ -41,7 +41,7 @@ unsigned int log_analysis_tool::analyse_block_buffer(char *block_buffer)
 {
 
     stringstream ss(block_buffer);
-    char line_buffer[LINE_BUFFER_LENGTH+1];
+
     line_buffer[LINE_BUFFER_LENGTH]='\0';
 
     do

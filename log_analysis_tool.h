@@ -7,7 +7,7 @@
 #include <fstream>
 
 #define FILE_BUFFER_LENGTH (1024*24)
-#define LINE_BUFFER_LENGTH 1024
+#define LINE_BUFFER_LENGTH FILE_BUFFER_LENGTH
 
 using namespace std;
 
@@ -37,6 +37,7 @@ private:
     string      formatter;
     unsigned short numOfKeyword;
     string      rgEprStr;
+    char line_buffer[LINE_BUFFER_LENGTH+1];
 };
 
 #endif // LOG_ANALYSIS_TOOL_H
