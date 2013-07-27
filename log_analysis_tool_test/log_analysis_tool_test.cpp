@@ -125,29 +125,44 @@ void log_analysis_tool_test::run_filter_test()
 
 void log_analysis_tool_test::constructor_test()
 {
-  int argc = 3;
-  const char *argv[] = {"lat","green|yellow|blue","log.txt"};
+    int argc = 3;
+    const char *argv[4] = {"lat","green|yellow|blue","log.txt"};
 
-  // test correct input
-  log_analysis_tool *lat_p= new log_analysis_tool(argc, argv);
-  QCOMPARE(lat_p->get_filename(),"log.txt");
-  QCOMPARE(lat_p->get_rgEprStr(),"(green)|(yellow)|(blue)");
-  delete lat_p;
+    // test correct input
+    log_analysis_tool *lat_p= new log_analysis_tool(argc, argv);
+    QCOMPARE(lat_p->get_filename(),"log.txt");
+    QCOMPARE(lat_p->get_rgEprStr(),"(green)|(yellow)|(blue)");
+    delete lat_p;
 
-  // test incorrect input: only 1 parameter
-  argc = 1;
-  lat_p= new log_analysis_tool(argc, argv);
+    // test incorrect input: only 1 parameter
+    argc = 1;
+    lat_p= new log_analysis_tool(argc, argv);
 
-  QCOMPARE(ss4ut.str(),string("argc(parameters number) is 1, invalid input\n"));
-  delete lat_p;
-  ss4ut.str("");//clear the string date in ss4ut
+    QCOMPARE(ss4ut.str(),string("Parameters not enough, should not < 3\n"));
+    delete lat_p;
+    ss4ut.str("");//clear the string date in ss4ut
 
-  // test incorrect input: only 2 parameters
-  argc = 2;
-  lat_p= new log_analysis_tool(argc, argv);
-  QCOMPARE(ss4ut.str(),string("argc(parameters number) is 2, invalid input\n"));
-  delete lat_p;
-  ss4ut.str("");//clear the string date in ss4ut
+    // test incorrect input: only 2 parameters
+    argc = 2;
+    lat_p= new log_analysis_tool(argc, argv);
+    QCOMPARE(ss4ut.str(),string("Parameters not enough, should not < 3\n"));
+    delete lat_p;
+    ss4ut.str("");//clear the string date in ss4ut
+    
+    //test --help and -h
+    argc = 2;
+    argv[1] = "--help";
+    lat_p= new log_analysis_tool(argc, argv);
+    QCOMPARE(ss4ut.str(),string("Help info not complete\n"));
+    delete lat_p;
+    ss4ut.str("");
+
+    argv[1] = "-h";
+    lat_p= new log_analysis_tool(argc, argv);
+    QCOMPARE(ss4ut.str(),string("Help info not complete\n"));
+    delete lat_p;
+    ss4ut.str("");
+
 }
 
 void log_analysis_tool_test::set_filename_test()

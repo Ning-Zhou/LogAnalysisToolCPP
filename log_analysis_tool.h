@@ -38,6 +38,7 @@ private:
     unsigned short numOfKeyword;
     string      rgEprStr;
     char line_buffer[LINE_BUFFER_LENGTH+1];
+    bool also_print_unmatched_line;
 };
 
 #endif // LOG_ANALYSIS_TOOL_H

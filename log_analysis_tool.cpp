@@ -9,23 +9,38 @@
 */
 log_analysis_tool::log_analysis_tool(int argc, const char *argv[])
 {
-    if (argc == 1 ) cout<<"argc(parameters number) is 1, invalid input"<<endl;
-    else    set_rgEprStr(argv[1]);
-
-    if (argc == 2 )  cout<<"argc(parameters number) is 2, invalid input"<<endl;
-    else    filename = argv[2];
-
-    if (argc > 3)
+    if(std::string(argv[1]) == "-h" || std::string(argv[1])== "--help")
     {
-        cout<<"argc(parameters number) more than 3, invalid input"<<endl;
+        cout<<"Help info not complete\n";
     }
+    else if (argc < 3 ) 
+    {
+        cout<<"Parameters not enough, should not < 3"<<endl;
+    }
+    else // although we can use getopt to parse the command options, we just use parse in following way for we only have one option
+    {
+        for( int i = 1; i < argc ; i++)
+        {
+            if (std::string(argv[i]) == "-a" )
+            {
+                also_print_unmatched_line = true;// also print the unmatching line
+            }
+            else
+            {
+                set_rgEprStr(argv[i]); 
+                filename = argv[i+1];
+                break;
+            }
+        }
+    }
+    // cout<<"Too many parameters!"<<endl;
 }
 
 /** Print matching line with color with a certain color.
 */
 void log_analysis_tool::colored_print_matched_part(char buffer[])
 {
-  boost::regex expression(rgEprStr);
+    boost::regex expression(rgEprStr);
   std::string line(buffer);
   std::string output= boost::regex_replace(line, expression,
                                            formatter);
