@@ -9,6 +9,6 @@ int main(int argc, const char *argv[])
 //    return a.exec();
 
     log_analysis_tool lat(argc, argv);
-    if ( argc > 3 )  lat.run_filter();
+    if ( argc > 2 )  lat.run_filter();
     return 0;
 }

@@ -25,7 +25,7 @@ private slots:
     }
 private:
     void create_test_input_file(const char *filename);
-
+    void run_filter_test_subcase(int argc, const char* argv[], string formatter, boost::regex);
     stringstream ss4ut;
     streambuf *p_cout_streambuf;
 };
@@ -46,9 +46,8 @@ void log_analysis_tool_test::create_test_input_file(const char *filename)
     fs.open(filename, std::ios::out);
     if (fs.fail()) std::cout<<"file open failed\n";
 
-    fs<<matching_string;
     expected_mbNum=0;//for check point 2 in run_filter description	 
-    end_line_pos = FILE_BUFFER_LENGTH-1-matching_string_size-expected_mbNum;
+    end_line_pos = FILE_BUFFER_LENGTH-1-expected_mbNum;
     fill(&buffer[0], &buffer[end_line_pos],'0');
     buffer[end_line_pos] = '\n';
     buffer[end_line_pos+1] = '\0';
@@ -92,8 +91,9 @@ void log_analysis_tool_test::create_test_input_file(const char *filename)
 /** Test run_filter in log_analysis_tool
  *  Check points:
  *  1. number of keywords is 1, 2, and 3
- *  2. mbnum is 0, 1, 2, 10
- *  3. file without a '\n' ending in last line
+ *  2. mbnum is 0, 1, 2, 10. Implemented in create_test_input_file()
+ *  3. file without a '\n' ending in last line. Implemented in create_test_input_file()   
+ *  4. test -a option
  */
 void log_analysis_tool_test::run_filter_test()
 {
@@ -101,25 +101,79 @@ void log_analysis_tool_test::run_filter_test()
     const char* filename = "run_filter_test_input.txt";//file to test run_filter 
     create_test_input_file(filename);
 
-    fstream fs;
-    fs.open(filename);
+    int argc = 0;
+    const char *argv[4];
     
-    char buffer[FILE_BUFFER_LENGTH*10];
-    fs.read(buffer, FILE_BUFFER_LENGTH*10);
-    
-    int argc = 3;
-    const char *argv[] = {"lat","red|yellow|green", filename};
-
-    log_analysis_tool *lat_p= new log_analysis_tool(argc, argv);
-    lat_p->run_filter();
-    
+    //3 keywords
     string formatter("\033[31m$1\033[0m\033[32m$2\033[0m\033[33m$3\033[0m");
     boost::regex expression("(red)|(yellow)|(green)");
-    std::string line(buffer);
-    std::string output = boost::regex_replace(line, expression, formatter)+'\n';
+
+    // test without option -a
+    argc = 3; argv[0]= "lat"; argv[1]="red|yellow|green"; argv[2]= filename;
+    run_filter_test_subcase(argc, argv, formatter, expression);
+
+    // test with option -a
+    argc = 4; argv[0]= "lat"; argv[1]= "-a"; argv[2]="red|yellow|green"; argv[3]= filename;
+    run_filter_test_subcase(argc, argv, formatter, expression);
+
+    //2 keywords
+    formatter = "\033[31m$1\033[0m\033[32m$2\033[0m";
+    expression = "(red)|(yellow)";
+
+    // test without option -a
+    argc = 3; argv[0]= "lat"; argv[1]="red|yellow"; argv[2]= filename;
+    run_filter_test_subcase(argc, argv, formatter, expression);
+
+    // test with option -a
+    argc = 4; argv[0]= "lat"; argv[1]= "-a"; argv[2]="red|yellow"; argv[3]= filename;
+    run_filter_test_subcase(argc, argv, formatter, expression);
+
+
+    //1 keyword
+    formatter = "\033[31m$1\033[0m";
+    expression = "(red)";
+
+    // test without option -a
+    argc = 3; argv[0]= "lat"; argv[1]="red"; argv[2]= filename;
+    run_filter_test_subcase(argc, argv, formatter, expression);
+
+    // test with option -a
+    argc = 4; argv[0]= "lat"; argv[1]= "-a"; argv[2]="red"; argv[3]= filename;
+    run_filter_test_subcase(argc, argv, formatter, expression);
+    
+}
+
+
+void log_analysis_tool_test::run_filter_test_subcase(int argc, const char * argv[], string formatter, boost::regex expression)
+{
+
+    fstream fs;    
+    char buffer[FILE_BUFFER_LENGTH];
+        
+    log_analysis_tool *lat_p= new log_analysis_tool(argc, argv);
+    fs.open(lat_p->filename);
+
+    lat_p->run_filter();
+    
+    std::string line;
+    std::string output("");
+    std::string output_line;
+    do 
+    {
+        fs.getline(buffer, FILE_BUFFER_LENGTH);
+
+        line = buffer;
+        line = line + '\n';
+
+        output_line = boost::regex_replace(line, expression, formatter);
+        if( lat_p->also_print_unmatched_line || output_line != line)
+            output = output + output_line;
+        if(fs.eof())break;        
+    }while(true);
+
     std::string console_output = ss4ut.str();
     QCOMPARE(console_output, output);
- 
+    ss4ut.str("");    
     delete lat_p;
 }
 

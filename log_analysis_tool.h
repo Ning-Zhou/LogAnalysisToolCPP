@@ -17,6 +17,8 @@ using namespace std;
 
 class log_analysis_tool
 {
+    friend class log_analysis_tool_test;
+
 public:
     log_analysis_tool(int argc, const char *argv[]);
     void run_filter();

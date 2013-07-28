@@ -9,6 +9,8 @@
 */
 log_analysis_tool::log_analysis_tool(int argc, const char *argv[])
 {
+    also_print_unmatched_line = false;// also print the unmatching line
+    
     if(std::string(argv[1]) == "-h" || std::string(argv[1])== "--help")
     {
         cout<<"Help info not complete\n";
@@ -41,10 +43,10 @@ log_analysis_tool::log_analysis_tool(int argc, const char *argv[])
 void log_analysis_tool::colored_print_matched_part(char buffer[])
 {
     boost::regex expression(rgEprStr);
-  std::string line(buffer);
-  std::string output= boost::regex_replace(line, expression,
+    std::string line(buffer);
+    std::string output= boost::regex_replace(line, expression,
                                            formatter);
-  std::cout<<output<<std::endl;
+    if ( also_print_unmatched_line || line != output )    std::cout<<output<<std::endl;
 }
 
 /** Check if each line matches the regular expression. 
